@@ -1,21 +1,9 @@
-nd: HTML + JavaScript (React is great if you want it fancy)
-
-Backend/API: OpenAI’s GPT API (you’ll need an API key)
-
-Optional: Node.js/Express server if you're handling sensitive info or logging
-
-⚙️ Basic MedGPT Chatbot Code (HTML + JavaScript):
-Here’s a super simple working version of a MedGPT chatbot using OpenAI’s API:
-
-html
-Copy
-Edit
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MedGPT Chatbot</title>
+  <title>MedGPT Chatbot 🤖</title>
   <style>
     body { font-family: Arial; padding: 20px; }
     #chat { max-height: 400px; overflow-y: auto; margin-bottom: 20px; border: 1px solid #ccc; padding: 10px; }
@@ -24,7 +12,7 @@ Edit
   </style>
 </head>
 <body>
-  <h2>🤖 MedGPT – Symptom Checker</h2>
+  <h2>MedGPT – Your Personal Symptom Checker</h2>
   <div id="chat"></div>
   <input type="text" id="input" placeholder="Describe your symptoms..." style="width: 80%;" />
   <button onclick="sendMessage()">Ask</button>
