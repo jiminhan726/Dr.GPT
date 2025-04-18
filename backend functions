@@ -1,3 +1,0 @@
-mkdir api
-cd api
-touch chat.js
