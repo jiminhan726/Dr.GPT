@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/chat.js": {
-    : ["OPENAI_API_KEY"]
+    vercel: ["OPENAI_API_KEY"]
     }
   }
 }
