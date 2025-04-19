@@ -11,6 +11,9 @@
       padding: 0;
       background: #f5f5f5;
       color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
@@ -56,93 +59,24 @@
     }
 
     main {
-      padding: 40px 20px;
-      max-width: 800px;
-      margin: auto;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 20px;
     }
 
     h2 {
       color: #0077cc;
+      font-size: 36px;
+      margin-bottom: 20px;
     }
 
-    .contact-info p {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .contact-info a {
-      color: #0077cc;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .contact-info a:hover {
-      text-decoration: underline;
-    }
-
-    #drgpt-chat {
-      background: white;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 600px;
-      height: 500px;
-      margin: 30px auto 0;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    #chat-box {
-      flex-grow: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    #chat-box div {
-      margin-bottom: 15px;
-    }
-
-    #chat-box .user-msg,
-    #chat-box .gpt-msg {
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      max-width: 80%;
-      word-wrap: break-word;
-    }
-
-    #chat-box .user-msg {
-      background-color: #d0f0ff;
-      align-self: flex-start;
-    }
-
-    #chat-box .gpt-msg {
-      background-color: #f1f1f1;
-      align-self: flex-end;
-    }
-
-    #user-input {
-      width: 85%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin: 10px;
-    }
-
-    button {
-      width: 15%;
-      padding: 12px;
-      border: none;
-      background-color: #0077cc;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background-color: #005fa3;
+    p {
+      font-size: 20px;
+      max-width: 700px;
     }
   </style>
 </head>
@@ -166,64 +100,25 @@
 
   <main>
     <h2>Welcome to Dr. GPT</h2>
-    <p>Dr. GPT is an AI-powered assistant that helps you understand your symptoms with gentle and supportive guidance. It's not a replacement for professional care, but it's here to help you feel heard and guided. Type your symptoms in the chat box below to get started!</p>
-
-    <div class="contact-info">
-      <h3>Start Chatting:</h3>
-      <p>Describe your symptoms, and Dr. GPT will provide you with some possibilities you might want to consider. Please note that this is not a diagnosis, but a way to understand your symptoms better.</p>
-    </div>
-
-    <!-- Chat Widget -->
-    <div id="drgpt-chat">
-      <div id="chat-box"></div>
-      <div style="display: flex; padding: 10px;">
-        <input type="text" id="user-input" placeholder="Describe your symptoms..." />
-        <button onclick="sendMessage()">Ask Dr. GPT</button>
-      </div>
-    </div>
+    <p>Your AI buddy for symptom support. Chat with Dr. GPT using the button in the corner to explore possible causes and next steps. Friendly, informative, and always here to help!</p>
   </main>
 
+  <!-- Chatbase Widget Embed -->
   <script>
-    async function sendMessage() {
-      const input = document.getElementById("user-input").value.trim();
-      const chatBox = document.getElementById("chat-box");
-
-      if (!input) return;
-
-      chatBox.innerHTML += `<div class="user-msg"><strong>You:</strong> ${input}</div>`;
-
-      const response = await fetch("http://localhost:3000/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ symptoms: input }),
-      });
-
-      const data = await response.json();
-      chatBox.innerHTML += `<div class="gpt-msg"><strong>Dr. GPT:</strong> ${data.reply}</div>`;
-      document.getElementById("user-input").value = "";
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-  </script>
-
-  <!-- ✅ Chatbase Widget Script -->
-  <script>
-    (function () {
+    (function(){
       if (!window.chatbase || window.chatbase("getState") !== "initialized") {
-        window.chatbase = (...arguments) => {
-          if (!window.chatbase.q) {
-            window.chatbase.q = [];
-          }
-          window.chatbase.q.push(arguments);
+        window.chatbase = (...args) => {
+          if (!window.chatbase.q) window.chatbase.q = [];
+          window.chatbase.q.push(args);
         };
         window.chatbase = new Proxy(window.chatbase, {
           get(target, prop) {
-            if (prop === "q") {
-              return target.q;
-            }
+            if (prop === "q") return target.q;
             return (...args) => target(prop, ...args);
           }
         });
       }
+
       const onLoad = function () {
         const script = document.createElement("script");
         script.src = "https://www.chatbase.co/embed.min.js";
@@ -231,6 +126,7 @@
         script.domain = "www.chatbase.co";
         document.body.appendChild(script);
       };
+
       if (document.readyState === "complete") {
         onLoad();
       } else {
@@ -238,6 +134,5 @@
       }
     })();
   </script>
-
 </body>
 </html>
