@@ -1,4 +1,6 @@
 // server.js
+require("dotenv").config(); // Load .env
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -8,9 +10,8 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Insert your API key here (keep this safe in .env in production)
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: process.env.OPENAI_API_KEY, // Now secured!
 });
 const openai = new OpenAIApi(configuration);
 
@@ -19,7 +20,7 @@ const generatePrompt = (symptoms) => {
   return `
 You are MedGPT, a helpful and kind AI that gives medical *guidance* (not diagnoses). You always follow this format:
 
-"Hi there! Thanks for sharing your symptoms. Based on what you said, here are a few possibilities you might want to consider. Please note that I am not a doctor, but I can help you better understand your symptoms:"
+"Hi! Thanks for sharing your symptoms. Based on what you said, here are a few possibilities you might want to consider. Please note that I am not a doctor, but I can help you better understand your symptoms:"
 - Possibility 1: ...
 - Possibility 2: ...
 
@@ -35,7 +36,7 @@ app.post("/ask", async (req, res) => {
 
   try {
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo", // or "gpt-4" if you have access
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
