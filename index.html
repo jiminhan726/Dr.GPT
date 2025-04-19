@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MedGPT</title>
+  <style>
+    body { font-family: Arial; padding: 20px; max-width: 600px; margin: auto; }
+    textarea, button { width: 100%; margin-top: 10px; padding: 10px; }
+    #response { margin-top: 20px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>🩺 MedGPT: Symptom Assistant</h1>
+  <p>Describe your symptoms below. MedGPT will offer friendly, helpful guidance:</p>
+  <textarea id="symptoms" rows="5" placeholder="e.g. sore throat, tired, and slight fever..."></textarea>
+  <button onclick="getResponse()">Ask MedGPT</button>
+  <div id="response"></div>
+
+  <script>
+    async function getResponse() {
+      const symptoms = document.getElementById("symptoms").value;
+      const responseDiv = document.getElementById("response");
+      responseDiv.innerHTML = "Thinking...";
+
+      const res = await fetch("http://localhost:3000/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symptoms }),
+      });
+
+      const data = await res.json();
+      responseDiv.innerHTML = data.reply;
+    }
+  </script>
+</body>
+</html>
