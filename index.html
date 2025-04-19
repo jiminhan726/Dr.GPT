@@ -11,14 +11,22 @@
       padding: 0;
       background: #f5f5f5;
       color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      overflow: hidden;
     }
 
     header {
       background-color: #0077cc;
       color: white;
-      padding: 10px 20px;
+      padding: 20px 20px;
       display: flex;
       align-items: center;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     header img {
@@ -40,6 +48,8 @@
     nav {
       background-color: #005fa3;
       padding: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
       text-align: center;
     }
 
@@ -59,60 +69,101 @@
       padding: 40px 20px;
       max-width: 800px;
       margin: auto;
+      text-align: center;
     }
 
     h2 {
       color: #0077cc;
     }
 
-    .contact-info p {
-      font-size: 18px;
+    /* Chat Widget Styling */
+    #drgpt-chat {
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      width: 600px;
+      height: 500px;
+      max-height: 80%;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      margin-top: 20px;
+      padding: 20px;
+    }
+
+    #chat-box {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 15px;
       margin-bottom: 10px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
     }
 
-    .contact-info a {
-      color: #0077cc;
-      text-decoration: none;
-      font-weight: bold;
+    #chat-box div {
+      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      max-width: 75%;
+      word-wrap: break-word;
+      background-color: #f1f1f1;
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
     }
 
-    .contact-info a:hover {
-      text-decoration: underline;
+    #chat-box .user-msg {
+      background-color: #d0f0ff;
+      align-self: flex-start;
+      max-width: 80%;
     }
 
-    .contact-form input, .contact-form textarea {
-      width: 100%;
+    #chat-box .gpt-msg {
+      background-color: #f1f1f1;
+      align-self: flex-end;
+      max-width: 80%;
+    }
+
+    #user-input {
+      width: 80%;
       padding: 10px;
-      margin-bottom: 20px;
-      border-radius: 4px;
       border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-right: 10px;
     }
 
-    .contact-form button {
-      padding: 10px 20px;
+    button {
+      padding: 10px 15px;
+      border: none;
       background-color: #0077cc;
       color: white;
-      border: none;
-      border-radius: 4px;
+      border-radius: 10px;
       cursor: pointer;
+      font-size: 16px;
+      width: 15%;
     }
 
-    .contact-form button:hover {
+    button:hover {
       background-color: #005fa3;
     }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+    }
+
   </style>
 </head>
 
 <body>
   <header>
-  <a href="index.html">
-    <img src="2drgpt-logo.png" alt="Dr. GPT Logo">
-  </a>
-  <div>
-    <h1>Dr. GPT</h1>
-    <p>Your friendly AI-powered medical guide</p>
-  </div>
-</header>
+    <a href="index.html">
+      <img src="2drgpt-logo.png" alt="Dr. GPT Logo">
+    </a>
+    <div>
+      <h1>Dr. GPT</h1>
+      <p>Your friendly AI-powered medical guide</p>
+    </div>
+  </header>
 
   <nav>
     <a href="index.html">Home</a>
@@ -131,12 +182,19 @@
 
     <!-- Chat Widget -->
     <div id="drgpt-chat">
-      <div id="chat-box"></div>
-      <input type="text" id="user-input" placeholder="Describe your symptoms..." />
-      <button onclick="sendMessage()">Ask Dr. GPT</button>
+      <div id="chat-box">
+        <!-- Messages will appear here -->
+      </div>
+      <div style="display: flex; padding: 10px;">
+        <input type="text" id="user-input" placeholder="Describe your symptoms..." />
+        <button onclick="sendMessage()">Ask Dr. GPT</button>
+      </div>
     </div>
-
   </main>
+
+  <footer>
+    <p>&copy; 2025 Dr. GPT. All rights reserved.</p>
+  </footer>
 
   <script>
     async function sendMessage() {
@@ -145,8 +203,10 @@
 
       if (!input) return;
 
-      chatBox.innerHTML += `<div><strong>You:</strong> ${input}</div>`;
+      // Display user's message
+      chatBox.innerHTML += `<div class="user-msg"><strong>You:</strong> ${input}</div>`;
 
+      // Call the server to get Dr. GPT's reply
       const response = await fetch("http://localhost:3000/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -154,11 +214,10 @@
       });
 
       const data = await response.json();
-      chatBox.innerHTML += `<div><strong>Dr. GPT:</strong> ${data.reply}</div>`;
+      chatBox.innerHTML += `<div class="gpt-msg"><strong>Dr. GPT:</strong> ${data.reply}</div>`;
       document.getElementById("user-input").value = "";
       chatBox.scrollTop = chatBox.scrollHeight;
     }
   </script>
 </body>
 </html>
-
