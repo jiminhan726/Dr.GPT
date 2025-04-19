@@ -6,30 +6,49 @@
   <title>Dr. GPT - Your Symptom Helper</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
       background: #f5f5f5;
+      color: #333;
     }
 
     header {
       background-color: #0077cc;
       color: white;
-      padding: 20px;
-      text-align: center;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    header img {
+      height: 50px;
+      margin-right: 15px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 14px;
+      color: #cce7ff;
     }
 
     nav {
       background-color: #005fa3;
-      padding: 10px;
+      padding: 10px 0;
       text-align: center;
     }
 
     nav a {
       color: white;
-      margin: 0 15px;
+      margin: 0 20px;
       text-decoration: none;
       font-weight: bold;
+      font-size: 16px;
     }
 
     nav a:hover {
@@ -37,67 +56,63 @@
     }
 
     main {
-      padding: 40px;
+      padding: 40px 20px;
       max-width: 800px;
       margin: auto;
     }
 
-    /* Chat Widget Styling */
-    #drgpt-chat {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 300px;
-      background: white;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      padding: 10px;
-      font-family: sans-serif;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      z-index: 1000;
+    h2 {
+      color: #0077cc;
     }
 
-    #chat-box {
-      height: 200px;
-      overflow-y: auto;
+    .contact-info p {
+      font-size: 18px;
       margin-bottom: 10px;
-      padding-right: 5px;
     }
 
-    #chat-box div {
-      margin-bottom: 6px;
+    .contact-info a {
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    #user-input {
-      width: 70%;
-      padding: 5px;
-      border: 1px solid #ccc;
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+
+    .contact-form input, .contact-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
       border-radius: 4px;
+      border: 1px solid #ccc;
     }
 
-    button {
-      padding: 6px 10px;
-      border: none;
+    .contact-form button {
+      padding: 10px 20px;
       background-color: #0077cc;
       color: white;
+      border: none;
       border-radius: 4px;
       cursor: pointer;
     }
 
-    button:hover {
+    .contact-form button:hover {
       background-color: #005fa3;
     }
   </style>
 </head>
 
 <body>
-    <header>
-  <a href="index.html">
-    <img src="2drgpt-logo.png" alt="Dr. GPT Logo" class="profile-pic" style="height: 50px; vertical-align: middle;">>
-  </a>
-  <h1 style="display: inline; margin-left: 10px;">Dr. GPT</h1>
-  <p>Your friendly AI-powered medical guide</p>
-</header>
+  <header>
+    <a href="index.html">
+      <img src="2drgpt-logo.png" alt="Dr. GPT Logo">
+    </a>
+    <div>
+      <h1>Dr. GPT</h1>
+      <p>Your friendly AI-powered medical guide</p>
+    </div>
+  </header>
 
   <nav>
     <a href="index.html">Home</a>
@@ -108,14 +123,20 @@
   <main>
     <h2>Welcome to Dr. GPT</h2>
     <p>Dr. GPT is an AI-powered assistant that helps you understand your symptoms with gentle and supportive guidance. It's not a replacement for professional care, but it's here to help you feel heard and guided. Type your symptoms in the chat box below to get started!</p>
-  </main>
 
-  <!-- Chat Widget -->
-  <div id="drgpt-chat">
-    <div id="chat-box"></div>
-    <input type="text" id="user-input" placeholder="Describe your symptoms..." />
-    <button onclick="sendMessage()">Ask Dr. GPT</button>
-  </div>
+    <div class="contact-info">
+      <h3>Start Chatting:</h3>
+      <p>Describe your symptoms, and Dr. GPT will provide you with some possibilities you might want to consider. Please note that this is not a diagnosis, but a way to understand your symptoms better.</p>
+    </div>
+
+    <!-- Chat Widget -->
+    <div id="drgpt-chat">
+      <div id="chat-box"></div>
+      <input type="text" id="user-input" placeholder="Describe your symptoms..." />
+      <button onclick="sendMessage()">Ask Dr. GPT</button>
+    </div>
+
+  </main>
 
   <script>
     async function sendMessage() {
@@ -140,3 +161,4 @@
   </script>
 </body>
 </html>
+
