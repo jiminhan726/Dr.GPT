@@ -1,21 +1,18 @@
-// server.js
-require("dotenv").config(); // Load .env
+require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, // Now secured!
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
-// Sentence frame template
 const generatePrompt = (symptoms) => {
   return `
 You are MedGPT, a helpful and kind AI that gives medical *guidance* (not diagnoses). You always follow this format:
@@ -35,28 +32,22 @@ app.post("/ask", async (req, res) => {
   const { symptoms } = req.body;
 
   try {
-    const response = await openai.createChatCompletion({
+    const chatCompletion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
-        {
-          role: "system",
-          content: "You are a kind, careful medical helper called MedGPT.",
-        },
-        {
-          role: "user",
-          content: generatePrompt(symptoms),
-        },
+        { role: "system", content: "You are a kind, careful medical helper called MedGPT." },
+        { role: "user", content: generatePrompt(symptoms) },
       ],
       temperature: 0.7,
     });
 
-    res.json({ reply: response.data.choices[0].message.content });
+    res.json({ reply: chatCompletion.choices[0].message.content });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error with OpenAI API");
+    console.error("OpenAI error:", error);
+    res.status(500).json({ error: "Something went wrong with MedGPT." });
   }
 });
 
 app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
+  console.log("✅ MedGPT server running at http://localhost:3000");
 });
