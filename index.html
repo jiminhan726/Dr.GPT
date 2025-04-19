@@ -11,10 +11,8 @@
       padding: 0;
       background: #f5f5f5;
       color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
+      /* Removed display: flex, justify-content, align-items */
     }
 
     header {
@@ -70,10 +68,11 @@
     }
 
     main {
-      margin-top: 120px; /* To prevent overlap with fixed header and nav */
+      margin-top: 120px; /* Prevents overlap with fixed header and nav */
       padding: 40px 20px;
       max-width: 1000px;
-      margin: auto;
+      margin-left: auto;
+      margin-right: auto;
       width: 100%;
     }
 
