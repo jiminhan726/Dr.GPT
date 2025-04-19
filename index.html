@@ -11,22 +11,14 @@
       padding: 0;
       background: #f5f5f5;
       color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
-      overflow: hidden;
     }
 
     header {
       background-color: #0077cc;
       color: white;
-      padding: 20px 20px;
+      padding: 10px 20px;
       display: flex;
       align-items: center;
-      width: 100%;
-      box-sizing: border-box;
     }
 
     header img {
@@ -48,8 +40,6 @@
     nav {
       background-color: #005fa3;
       padding: 10px 0;
-      width: 100%;
-      box-sizing: border-box;
       text-align: center;
     }
 
@@ -61,97 +51,99 @@
       font-size: 16px;
     }
 
-  
+    nav a:hover {
+      text-decoration: underline;
+    }
+
     main {
       padding: 40px 20px;
       max-width: 800px;
       margin: auto;
-      text-align: center;
     }
 
     h2 {
       color: #0077cc;
     }
 
-    /* Chat Widget Styling */
+    .contact-info p {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .contact-info a {
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+
     #drgpt-chat {
       background: white;
       border: 2px solid #ccc;
       border-radius: 10px;
-      width: 600px;
+      width: 100%;
+      max-width: 600px;
       height: 500px;
-      max-height: 80%;
+      margin: 30px auto 0;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      margin-top: 20px;
-      padding: 20px;
-      position: relative;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     #chat-box {
       flex-grow: 1;
+      padding: 20px;
       overflow-y: auto;
-      padding-right: 15px;
-      margin-bottom: 10px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
     }
 
     #chat-box div {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    #chat-box .user-msg,
+    #chat-box .gpt-msg {
       padding: 12px;
-      border-radius: 10px;
-      max-width: 75%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      max-width: 80%;
       word-wrap: break-word;
-      background-color: #f1f1f1;
-      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
     }
 
     #chat-box .user-msg {
       background-color: #d0f0ff;
       align-self: flex-start;
-      max-width: 80%;
     }
 
     #chat-box .gpt-msg {
       background-color: #f1f1f1;
       align-self: flex-end;
-      max-width: 80%;
     }
 
     #user-input {
-      width: 80%;
-      padding: 10px;
+      width: 85%;
+      padding: 12px;
       border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 16px;
-      margin-right: 10px;
+      border-radius: 8px;
+      margin: 10px;
     }
 
     button {
-      padding: 10px 15px;
+      width: 15%;
+      padding: 12px;
       border: none;
       background-color: #0077cc;
       color: white;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
-      width: 15%;
     }
 
     button:hover {
       background-color: #005fa3;
     }
-
-    footer {
-      margin-top: 20px;
-      text-align: center;
-    }
-
   </style>
 </head>
 
@@ -183,19 +175,13 @@
 
     <!-- Chat Widget -->
     <div id="drgpt-chat">
-      <div id="chat-box">
-        <!-- Messages will appear here -->
-      </div>
+      <div id="chat-box"></div>
       <div style="display: flex; padding: 10px;">
         <input type="text" id="user-input" placeholder="Describe your symptoms..." />
         <button onclick="sendMessage()">Ask Dr. GPT</button>
       </div>
     </div>
   </main>
-
-  <footer>
-    <p>&copy; 2025 Dr. GPT. All rights reserved.</p>
-  </footer>
 
   <script>
     async function sendMessage() {
@@ -204,10 +190,8 @@
 
       if (!input) return;
 
-      // Display user's message
       chatBox.innerHTML += `<div class="user-msg"><strong>You:</strong> ${input}</div>`;
 
-      // Call the server to get Dr. GPT's reply
       const response = await fetch("http://localhost:3000/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -220,5 +204,40 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
   </script>
+
+  <!-- ✅ Chatbase Widget Script -->
+  <script>
+    (function () {
+      if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+        window.chatbase = (...arguments) => {
+          if (!window.chatbase.q) {
+            window.chatbase.q = [];
+          }
+          window.chatbase.q.push(arguments);
+        };
+        window.chatbase = new Proxy(window.chatbase, {
+          get(target, prop) {
+            if (prop === "q") {
+              return target.q;
+            }
+            return (...args) => target(prop, ...args);
+          }
+        });
+      }
+      const onLoad = function () {
+        const script = document.createElement("script");
+        script.src = "https://www.chatbase.co/embed.min.js";
+        script.id = "jyJntz1WHc6idC2X77An3";
+        script.domain = "www.chatbase.co";
+        document.body.appendChild(script);
+      };
+      if (document.readyState === "complete") {
+        onLoad();
+      } else {
+        window.addEventListener("load", onLoad);
+      }
+    })();
+  </script>
+
 </body>
 </html>
